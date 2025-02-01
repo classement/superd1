@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <title>Register | Flask</title>
+  <!-- Latest compiled and minified CSS -->
+
+  <link type="text/javascript" href="{{ url_for('static', filename='js/datatables.min.js') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <!-- Optional theme -->
+
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">تعديل نتائج المباراة</h2>
+        <form method="POST" action="{{ url_for('modifie_match', match_id=match_id) }}">
+            <div class="mb-3">
+                <label for="equipe1" class="form-label">الفريق الأول:</label>
+                <input type="text" class="form-control" id="equipe1" value="{{ match.equipe_a }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="score_equipe1" class="form-label">نتيجة الفريق الأول:</label>
+                <input type="number" class="form-control" id="score_equipe1" min="0" name="score_equipe1" value="{{ match.Score_equipe1 }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="equipe2" class="form-label">الفريق الثاني:</label>
+                <input type="text" class="form-control" id="equipe2" value="{{ match.equipe_b }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="score_equipe2" class="form-label">نتيجة الفريق الثاني:</label>
+                <input type="number" class="form-control" id="score_equipe2"  min="0" name="score_equipe2" value="{{ match.Score_equipe2 }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">تاريخ المباراة:</label>
+                <input type="date" class="form-control" id="date" name="date" value="{{ match.date }}" required>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                <a href="{{ url_for('match_results') }}" class="btn btn-secondary">إلغاء</a>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.bootstrap4.min.js') }}"></script>
+</body>
+
+</html>

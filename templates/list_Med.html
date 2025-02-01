@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+<title>Hotel Dashboard Template</title>
+
+<link rel="shortcut icon" type="image/x-icon" href="static/img/favicon.png">
+
+<link rel="stylesheet" href="static/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/plugins/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="static/plugins/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="static/css/feathericon.min.css">
+<link rel="stylesheet" href="static/plugins/datatables/datatables.min.css">
+<link rel="stylesheet" href="static/plugins/morris/morris.css">
+<link rel="stylesheet" type="text/css" href="static/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<div class="main-wrapper">
+
+<div class="header">
+    <div class="header-left">
+        <a href="#" class="logo">
+            <img src="static/logos/LOGO.png" width="50" height="70" alt="logo">
+            <span class="logoclass">SUPER-D1</span>
+        </a>
+        <a href="index.html" class="logo logo-small">
+            <img src="static/logos/LOGO.png" width="50" height="70" alt="logo">
+        </a>
+    </div>
+    <a href="javascript:void(0);" id="toggle_btn"><i class="fe fe-text-align-left"></i></a>
+    <a class="mobile_btn" id="mobile_btn"><i class="fas fa-bars"></i></a>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul><li>
+<li class="active"> <a href="#"><i class="fas fa-trophy"></i> <span>SUPER DIVISION</span></a>
+</li>
+               <li class="list-divider"></li>
+						<li class="submenu"> <a href="#"><i class="fas fa-list-ol"></i> <span> CLASSEMENT </span> <span class="menu-arrow"></span></a>
+							<ul class="" style="display: none;">
+								<li><a href="/classement">Liste  De Classement</a></li>
+
+<!--								<li><a href="add-staff.html"> Add Staff </a></li>-->
+							</ul>
+						</li>
+                        <li><a href="/get_statistics_data"><i class="fas fa-chart-pie"></i> <span>Statistiques</span></a></li>
+						<li class="submenu"> <a href="#"><i class="fas fa-futbol"></i> <span> MATCHES </span> <span class="menu-arrow"></span></a>
+							<ul class="submenu_class" style="display: none;">
+								<li><a href="/match_results"> Score De Matches </a></li>
+								{% if session['role'] == 'admin' %}
+                                     <a href="/add_match" class="btn btn-primary">Ajouter un Matchs</a>
+                                {% endif %}
+<!--								<li><a href="add-customer.html"> Add Customer </a></li>-->
+							</ul>
+						</li>
+
+                        {% if session['role'] == 'admin' %}
+						<li class="submenu"> <a href="#"><i class="fas fa-plus-circle"></i> <span>add - MATCHES </span> <span class="menu-arrow"></span></a>
+							<ul class="submenu_class" style="display: none;">
+								<li><a href="/upload"> Add  De Matches Excel </a></li>
+								{% if session['role'] == 'admin' %}
+                                     <a href="/add_match" class="btn btn-primary">Ajouter un Matchs</a>
+                                {% endif %}
+<!--								<li><a href="add-customer.html"> Add Customer </a></li>-->
+							</ul>
+						</li>
+                        {% endif %}
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>logo out</span></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br>
+    <br>
+    <br>
+              <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="text-center">
+                                {% if selected_week %}
+                                matches pour le semaine: {{ selected_week }}
+                                {% else %}
+                                SCORE DE MATCHES
+                                {% endif %}
+                            </h4>
+                        </div>
+                        <div class="col text-right">
+                            <form method="GET" action="{{ url_for('match_results') }}">
+                                <select name="week" onchange="this.form.submit()" class="form-control">
+                                    <option value="">choisi une semaine</option>
+                                    {% for week in range(1, 25) %}
+                                    <option value="{{ week }}" {% if week == selected_week %}selected{% endif %}>semaine {{ week }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                        <div class="col text-right">
+                            {% if session['role'] == 'admin' %}
+                            <a href="/add_match" class="btn btn-primary">Ajouter un Match</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="datatable table table-stripped">
+                                        <thead>
+                                            <tr>
+                                                <th>Semaine</th>
+                                                <th>Équipe A</th>
+                                                <th>Logo Équipe A</th>
+                                                <th>Score</th>
+                                                <th>Logo Équipe B</th>
+                                                <th>Équipe B</th>
+                                                <th>Date Matches</th>
+                                                {% if session['role'] == 'admin' %}
+                                                <th>Update</th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for row in QP %}
+                                            <tr>
+                                                <td><a href="{{ url_for('filter_by_week', week=row[0]) }}">{{ row[0] }}</a></td>
+                                                <td>{{ row[1] }}</td>
+                                                <td><img src="{{ row[2] }}" alt="Logo Team A" style="width: 40px; height: 40px;"></td>
+                                                <td>{{ row[5] }} - {{ row[6] }}</td>
+                                                <td><img src="{{ row[4] }}" alt="Logo Team B" style="width: 40px; height: 40px;"></td>
+                                                <td>{{ row[3] }}</td>
+                                               <td>{{ row[7]}}</td>
+                                                {% if session['role'] == 'admin' %}
+                                                <td><a href="{{ url_for('modifie_match', match_id=row[8]) }}" class="btn btn-primary">Modifie</a></td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="static/js/jquery-3.5.1.min.js"></script>
+    <script src="static/js/popper.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="static/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/plugins/datatables/datatables.min.js"></script>
+    <script src="static/js/script.js"></script>
+</body>
+
+</html>
